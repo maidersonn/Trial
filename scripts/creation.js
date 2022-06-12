@@ -10,18 +10,13 @@ const create = async()  => {
         CREATE TYPE status_mode AS ENUM ('pending', 'rejected');
         `);
   
-      await db.query(sql`
-        CREATE TABLE IF NOT EXISTS users (
-             id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-             email TEXT UNIQUE NOT NULL
-        );
-        
+      await db.query(sql`        
         CREATE TABLE IF NOT EXISTS referral (
             id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-            referrer uuid references users(id),
-            email TEXT UNIQUE NOT NULL,
+            referrer uuid NOT NULL,
+            email TEXT NOT NULL,
             description TEXT,
-            status status_mode,
+            status status_mode NOT NULL,
             involvement SMALLINT NOT NULL CHECK (involvement BETWEEN 0 AND 10),
             talent SMALLINT NOT NULL CHECK (talent BETWEEN 0 AND 10),
             dataReferrer TIMESTAMP NOT NULL DEFAULT (now() AT TIME ZONE 'UTC')
