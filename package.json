@@ -7,7 +7,8 @@
     "start": "node index.js",
     "docker:up": "docker-compose up",
     "docker:start": "docker-compose start",
-    "docker:down": "docker-compose down"
+    "docker:down": "docker-compose down",
+    "db:create": "node scripts/creation.js"
   },
   "author": "Maider",
   "license": "ISC",
