@@ -3,6 +3,8 @@ const express = require("express");
 const app = express();
 const db = require("./config/db");
 
+app.use(express.json());
+
 app.use(require("./controllers")(db));
 
 app.listen(process.env.PORT || 3000, () => {
