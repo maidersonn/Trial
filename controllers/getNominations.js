@@ -1,4 +1,4 @@
-const getNominations = require("../data/getNominations");
+const getNominations = require("../data/nominations/getAllNonRejected");
 
 module.exports = (db) => async (_, res) => {
 

@@ -18,7 +18,7 @@ const create = async () => {
     
       CREATE TABLE IF NOT EXISTS referral (
         id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-        referrer uuid NOT NULL,
+        referrer uuid references members(id) NOT NULL,
         email TEXT NOT NULL,
         description TEXT,
         status status_mode NOT NULL,

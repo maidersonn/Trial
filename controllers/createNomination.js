@@ -1,6 +1,6 @@
-const createNomination = require("../data/createNomination");
-const getByEmail = require("../data/getByEmail");
-const getById = require("../data/getById");
+const createNomination = require("../data/nominations/create");
+const getNomineeByEmail = require("../data/nominations/getByEmail");
+const getMemberById = require("../data/members/getById");
 const sendEmail = require("../helpers/emailHandler");
 
 module.exports = (db) => async (req, resp) => {
@@ -9,9 +9,7 @@ module.exports = (db) => async (req, resp) => {
         const { memberId } = req.params;
         const { email, description, score } = req.body;
 
-        if (!email || !score.involvement || !score.talent || !memberId ||
-            !isUUID(memberId) || isNaN(score.involvement) || isNaN(score.talent) || !isEmail(email) ||
-            !(score.talent > 0 && score.talent <= 10) || !(score.involvement > 0 && score.involvement <= 10)) {
+        if (isRequestInvalid({ memberId, email, talent: score.talent, involvement: score.involvement })) {
 
             return resp.status(400).json({
                 success: false,
@@ -19,7 +17,7 @@ module.exports = (db) => async (req, resp) => {
             });
         };
 
-        const member = await getById(db, memberId);
+        const member = await getMemberById(db, memberId);
 
         if (!member.length) {
             return resp.status(400).json({
@@ -28,7 +26,7 @@ module.exports = (db) => async (req, resp) => {
         };
 
 
-        const nominee = await getByEmail(db, email);
+        const nominee = await getNomineeByEmail(db, email);
 
         if (nominee.length) {
             return resp.status(409).json({
@@ -51,11 +49,6 @@ module.exports = (db) => async (req, resp) => {
             message: "Some transient error ocurred"
         })
     }
-
-
-
-
-
 };
 
 const isUUID = (string) => string.match("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
@@ -64,4 +57,16 @@ const isEmail = (email) => {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
 };
+
+const isRequestInvalid = ({ memberId, email, talent, involvement }) => {
+
+    return (email === undefined ||
+        involvement === undefined || involvement === "" || isNaN(involvement) ||
+        talent === undefined || talent === "" || isNaN(talent) ||
+        memberId === undefined ||
+        !isUUID(memberId) ||
+        !isEmail(email) ||
+        !(talent >= 0 && talent <= 10) ||
+        !(involvement >= 0 && involvement <= 10));
+}
 
