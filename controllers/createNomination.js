@@ -1,4 +1,5 @@
 const createNomination = require("../data/createNomination");
+const getById = require("../data/getById");
 
 module.exports = (db) => async (req, resp, next) => {
     const { memberId } = req.params;
@@ -8,24 +9,30 @@ module.exports = (db) => async (req, resp, next) => {
         !isUUID(memberId) || isNaN(score.involvement) || isNaN(score.talent) || !isEmail(email) ||
         !(score.talent >= 0 && score.talent <= 10) || !(score.involvement >= 0 && score.involvement <= 10)) {
 
-        resp.status(400).json({
+        return resp.status(400).json({
             success: false,
             message: "Given data failed"
         });
     };
+
+    const member = await getById(db, memberId);
+
+    if (!member) {
+        return resp.status(400).json({
+            message: "Member does not exist"
+        });
+    }
 
     const status = score.talent < 8 ? "rejected" : "pending";
 
     const result = await createNomination(db, { memberId, email, description, involvement: score.involvement, talent: score.talent, status });
 
     if (result === false) {
-        resp.status(500).json({
+        return resp.status(500).json({
             success: false,
             message: "Some transient error ocurred"
         })
     };
-
-    console.log("result of insertion", result)
 
     resp.status(200).json({ message: "Nomination created" });
 

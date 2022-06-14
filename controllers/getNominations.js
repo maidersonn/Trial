@@ -4,7 +4,7 @@ module.exports = (db) => async (req, res, next) => {
     const results = await getNominations(db);
 
     if (results === false) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: "Some transient error ocurred"
         })
