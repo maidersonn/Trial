@@ -1,8 +1,9 @@
 const createNomination = require("../data/createNomination");
 const getByEmail = require("../data/getByEmail");
 const getById = require("../data/getById");
+const sendEmail = require("../helpers/emailHandler");
 
-module.exports = (db) => async (req, resp, next) => {
+module.exports = (db) => async (req, resp) => {
 
     try {
         const { memberId } = req.params;
@@ -29,7 +30,7 @@ module.exports = (db) => async (req, resp, next) => {
 
         const nominee = await getByEmail(db, email);
 
-        if (nominee) {
+        if (nominee.length) {
             return resp.status(409).json({
                 message: "Nomination already exists"
             });
@@ -39,14 +40,9 @@ module.exports = (db) => async (req, resp, next) => {
 
         const result = await createNomination(db, { memberId, email, description, involvement: score.involvement, talent: score.talent, status });
 
-
-        /*  
-            if (status < 8) {
-                const referrer = await getById(db, memberId);
-        
-                // mando un email
-            };
-        */
+        if (result[0].status === "rejected") {
+            sendEmail([member[0].email, result[0].email]);
+        };
 
         resp.status(200).json({ message: "Nomination created" });
 

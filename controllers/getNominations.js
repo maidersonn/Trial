@@ -1,6 +1,6 @@
 const getNominations = require("../data/getNominations");
 
-module.exports = (db) => async (req, res, next) => {
+module.exports = (db) => async (_, res) => {
 
     try {
         const results = await getNominations(db);

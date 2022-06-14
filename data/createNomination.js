@@ -5,7 +5,7 @@ module.exports = async (db, { memberId, email, description, involvement, talent,
         const result = await db.query(sql`
             INSERT INTO referral (referrer, email, description, involvement, talent, status)
             VALUES (${memberId}, ${email}, ${description}, ${involvement}, ${talent}, ${status})
-            RETURNING email
+            RETURNING email, status
       `);
         return result.rows;
     } catch (error) {
