@@ -9,7 +9,7 @@ module.exports = async (db, { memberId, email, description, involvement, talent,
       `);
         return result.rows;
     } catch (error) {
-        console.info("Error at createNominations query: ", error.message);
-        return false;
+        console.error("Error at createNominations query: ", error.message);
+        throw error;
     }
 };

@@ -1,40 +1,64 @@
 const createNomination = require("../data/createNomination");
+const getByEmail = require("../data/getByEmail");
 const getById = require("../data/getById");
 
 module.exports = (db) => async (req, resp, next) => {
-    const { memberId } = req.params;
-    const { email, description, score } = req.body;
 
-    if (!email || !score.involvement || !score.talent || !memberId ||
-        !isUUID(memberId) || isNaN(score.involvement) || isNaN(score.talent) || !isEmail(email) ||
-        !(score.talent >= 0 && score.talent <= 10) || !(score.involvement >= 0 && score.involvement <= 10)) {
+    try {
+        const { memberId } = req.params;
+        const { email, description, score } = req.body;
 
-        return resp.status(400).json({
-            success: false,
-            message: "Given data failed"
-        });
-    };
+        if (!email || !score.involvement || !score.talent || !memberId ||
+            !isUUID(memberId) || isNaN(score.involvement) || isNaN(score.talent) || !isEmail(email) ||
+            !(score.talent > 0 && score.talent <= 10) || !(score.involvement > 0 && score.involvement <= 10)) {
 
-    const member = await getById(db, memberId);
+            return resp.status(400).json({
+                success: false,
+                message: "Given data failed"
+            });
+        };
 
-    if (!member) {
-        return resp.status(400).json({
-            message: "Member does not exist"
-        });
-    }
+        const member = await getById(db, memberId);
 
-    const status = score.talent < 8 ? "rejected" : "pending";
+        if (!member.length) {
+            return resp.status(400).json({
+                message: "Member does not exist"
+            });
+        };
 
-    const result = await createNomination(db, { memberId, email, description, involvement: score.involvement, talent: score.talent, status });
 
-    if (result === false) {
-        return resp.status(500).json({
-            success: false,
+        const nominee = await getByEmail(db, email);
+
+        if (nominee) {
+            return resp.status(409).json({
+                message: "Nomination already exists"
+            });
+        };
+
+        const status = score.talent < 8 ? "rejected" : "pending";
+
+        const result = await createNomination(db, { memberId, email, description, involvement: score.involvement, talent: score.talent, status });
+
+
+        /*  
+            if (status < 8) {
+                const referrer = await getById(db, memberId);
+        
+                // mando un email
+            };
+        */
+
+        resp.status(200).json({ message: "Nomination created" });
+
+    } catch (error) {
+        resp.status(500).json({
             message: "Some transient error ocurred"
         })
-    };
+    }
 
-    resp.status(200).json({ message: "Nomination created" });
+
+
+
 
 };
 

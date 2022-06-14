@@ -7,9 +7,9 @@ module.exports = async (db, memberId) => {
             FROM members
             WHERE id = ${memberId}
       `);
-        return result.rowCount;
+        return result.rows;
     } catch (error) {
-        console.info("Error at geById query: ", error.message);
-        return false;
+        console.error("Error at geById query: ", error.message);
+        throw error;
     }
 };

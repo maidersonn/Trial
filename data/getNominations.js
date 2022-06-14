@@ -9,8 +9,8 @@ module.exports = async (db) => {
       `);
         return result.rows;
     } catch (error) {
-        console.info("Error at geTNominations query: ", error.message);
-        return false;
+        console.error("Error at geTNominations query: ", error.message);
+        throw error;
     }
 };
 
