@@ -48,3 +48,4 @@ Variables de entorno necesarios:
 + Configurar despliegue automático. 
 + Gestionar el problema de los emails no enviados. 
 + Veo que el controlador del createNominations está algo cargado, es decir tiene que comprobar muchas cosas antes de hacer su función de crear una nominación y también manda el email. Estaría bien darle menos responsabilidades. 
++ Añadir paginación al endpoint /nominations.
