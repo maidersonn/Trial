@@ -2,8 +2,8 @@ const { sql } = require("slonik");
 
 module.exports = async (db) => {
     try {
-        const result = await db.query(sql`
-            SELECT id, email, description, involvement, talent, referrer, dataReferrer, status
+        const result = await db.query(sql`      
+            SELECT *
             FROM referral
             WHERE status = 'pending'
       `);

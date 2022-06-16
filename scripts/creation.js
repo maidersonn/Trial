@@ -24,7 +24,7 @@ const create = async () => {
         status status_mode NOT NULL,
         involvement SMALLINT NOT NULL CHECK (involvement BETWEEN 0 AND 10),
         talent SMALLINT NOT NULL CHECK (talent BETWEEN 0 AND 10),
-        dataReferrer TIMESTAMP NOT NULL DEFAULT (now() AT TIME ZONE 'UTC')
+        referral_date TIMESTAMP NOT NULL DEFAULT (now() AT TIME ZONE 'UTC')        
         )
     `);
     console.info('> creation done! 🚀');

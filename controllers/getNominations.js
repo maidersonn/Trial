@@ -5,7 +5,7 @@ module.exports = (db) => async (_, res) => {
     try {
         const results = await getNominations(db);
 
-        const nominations = results.map(({ id, email, description, involvement, talent, referrer, dataReferred, status }) => {
+        const nominations = results.map(({ id, email, description, involvement, talent, referrer, referral_date, status }) => {
             return {
                 "id": id,
                 "email": email,
@@ -15,7 +15,7 @@ module.exports = (db) => async (_, res) => {
                     "talent": talent
                 },
                 "referrer": referrer,
-                "dataReferrer": dataReferred,
+                "referral_date": new Date(referral_date),
                 "status": status
             }
         })
