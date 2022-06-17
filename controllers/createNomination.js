@@ -9,14 +9,12 @@ module.exports = (db) => async (req, resp) => {
         const { memberId } = req.params;
         const { email, description, score } = req.body;
 
-        if (isRequestInvalid({ memberId, email, talent: score.talent, involvement: score.involvement })) {
-
+        if (isRequestInvalid({ memberId, email, description, score })) {
             return resp.status(400).json({
                 success: false,
                 message: "Given data failed"
             });
         };
-
         const member = await getMemberById(db, memberId);
 
         if (!member.length) {
@@ -24,7 +22,6 @@ module.exports = (db) => async (req, resp) => {
                 message: "Member does not exist"
             });
         };
-
 
         const nominee = await getNomineeByEmail(db, email);
 
@@ -58,15 +55,24 @@ const isEmail = (email) => {
     return re.test(email);
 };
 
-const isRequestInvalid = ({ memberId, email, talent, involvement }) => {
+const isRequestInvalid = ({ memberId, email, score, description }) => {
 
-    return (email === undefined ||
-        involvement === undefined || involvement === "" || isNaN(involvement) ||
-        talent === undefined || talent === "" || isNaN(talent) ||
-        memberId === undefined ||
-        !isUUID(memberId) ||
-        !isEmail(email) ||
-        !(talent >= 0 && talent <= 10) ||
-        !(involvement >= 0 && involvement <= 10));
-}
+    return isEmailValid(email) && isMemberIdValid(memberId) && isScoreValid(score) && isDescriptionValid(description);
+};
+
+const isEmailValid = (email) => (email !== undefined && isEmail(email));
+
+const isMemberIdValid = (memberId) => (memberId !== undefined && isUUID(memberId));
+
+const isScoreValid = (score) => {
+    return (
+        score !== undefined &&
+        score.involvement !== undefined && score.involvement !== "" && !isNaN(score.involvement) &&
+        score.talent !== undefined && score.talent !== "" && !isNaN(score.talent) &&
+        (score.talent >= 0 && score.talent <= 10) &&
+        (score.involvement >= 0 && score.involvement <= 10)
+    );
+};
+
+const isDescriptionValid = (description) => description !== undefined;
 
