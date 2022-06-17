@@ -15,7 +15,7 @@ module.exports = (db) => async (_, res) => {
                     "talent": talent
                 },
                 "referrer": referrer,
-                "referral_date": new Date(referral_date),
+                "dateReferred": new Date(referral_date),
                 "status": status
             }
         })
