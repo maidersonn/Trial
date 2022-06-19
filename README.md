@@ -34,6 +34,8 @@ Variables de entorno necesarios:
   - MAIL_USER
   - MAIL_PASS
 
+En la terminal ejecutar :
+> npm run start
 
 ## Suposiciones
 

@@ -9,7 +9,7 @@ module.exports = (db) => async (req, resp) => {
         const { memberId } = req.params;
         const { email, description, score } = req.body;
 
-        if (isRequestInvalid({ memberId, email, description, score })) {
+        if (!isRequestValid({ memberId, email, description, score })) {
             return resp.status(400).json({
                 success: false,
                 message: "Given data failed"
@@ -55,7 +55,7 @@ const isEmail = (email) => {
     return re.test(email);
 };
 
-const isRequestInvalid = ({ memberId, email, score, description }) => {
+const isRequestValid = ({ memberId, email, score, description }) => {
 
     return isEmailValid(email) && isMemberIdValid(memberId) && isScoreValid(score) && isDescriptionValid(description);
 };
