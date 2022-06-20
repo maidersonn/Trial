@@ -18,7 +18,7 @@ Levantar postgres y adminer. Desde la raíz del proyecto,ejecutar en consola el 
 Para crear las tablas, ejecutar en consola desde la raíz del proyecto: 
 > node scripts/creation.js
 
-Para popular la base de datos, ejecutar el consola desde la proyecto:
+Para popular la base de datos, ejecutar en consola desde la raíz del proyecto:
 > node scripts/seed.js
 
 Para comprobar que las tablas se han creado correctamente, acceder a `adminer` desde: 
@@ -51,6 +51,6 @@ En la terminal ejecutar :
 + Gestionar las request que se hagan con un path incorrecto, es decir, los 404.
 + Añadir tests. 
 + Configurar despliegue automático. 
-+ Gestionar el problema de los emails no enviados. 
++ Gestionar el asunto de los emails no enviados. 
 + Veo que el controlador del createNominations está algo cargado, es decir tiene que comprobar muchas cosas antes de hacer su función de crear una nominación y también manda el email. Estaría bien darle menos responsabilidades. 
 + Añadir paginación al endpoint /nominations.
