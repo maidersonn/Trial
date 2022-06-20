@@ -18,6 +18,9 @@ Levantar postgres y adminer. Desde la raíz del proyecto,ejecutar en consola el 
 Para crear las tablas, ejecutar en consola desde la raíz del proyecto: 
 > node scripts/creation.js
 
+Para popular la base de datos, ejecutar el consola desde la proyecto:
+> node scripts/seed.js
+
 Para comprobar que las tablas se han creado correctamente, acceder a `adminer` desde: 
 > http://localhost:8080
 
