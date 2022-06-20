@@ -8,6 +8,7 @@ module.exports = async (db, { memberId, email, description, involvement, talent,
             RETURNING email, status
       `);
         return result.rows;
+
     } catch (error) {
         console.error("Error at createNominations query: ", error.message);
         throw error;

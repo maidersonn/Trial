@@ -7,7 +7,8 @@ module.exports = async (db, email) => {
             FROM referral
             WHERE email = ${email}
       `);
-        return result.rows;
+        return result.rows[0];
+
     } catch (error) {
         console.error("Error at geByEmail query: ", error.message);
         throw error;

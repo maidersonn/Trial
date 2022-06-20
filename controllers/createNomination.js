@@ -17,7 +17,7 @@ module.exports = (db) => async (req, resp) => {
         };
         const member = await getMemberById(db, memberId);
 
-        if (!member.length) {
+        if (!member) {
             return resp.status(400).json({
                 message: "Member does not exist"
             });
@@ -25,7 +25,7 @@ module.exports = (db) => async (req, resp) => {
 
         const nominee = await getNomineeByEmail(db, email);
 
-        if (nominee.length) {
+        if (nominee) {
             return resp.status(409).json({
                 message: "Nomination already exists"
             });

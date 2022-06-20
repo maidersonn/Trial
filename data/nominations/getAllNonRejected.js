@@ -8,6 +8,7 @@ module.exports = async (db) => {
             WHERE status = 'pending'
       `);
         return result.rows;
+
     } catch (error) {
         console.error("Error at geTNominations query: ", error.message);
         throw error;
