@@ -36,7 +36,7 @@ module.exports = (db) => async (req, resp) => {
         const result = await createNomination(db, { memberId, email, description, involvement: score.involvement, talent: score.talent, status });
 
         if (result[0].status === "rejected") {
-            sendEmail([member[0].email, result[0].email]);
+            sendEmail([member.email, result[0].email]);
         };
 
         resp.status(200).json({ message: "Nomination created" });
